@@ -134,6 +134,7 @@ namespace NokiDrome.UWP.Services
             _player.Play();
             UpdateSmtc(song);
             TrackChanged?.Invoke(this, song);
+            TileService.Update(song);
             var nowPlaying = App.Subsonic.ScrobbleAsync(song.Id, submission: false);
         }
 
