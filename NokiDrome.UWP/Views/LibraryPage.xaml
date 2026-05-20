@@ -1,0 +1,252 @@
+<Page
+    x:Class="NokiDrome.UWP.Views.LibraryPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    NavigationCacheMode="Required">
+
+    <Grid Background="{StaticResource BackgroundDeepBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Grid Grid.Row="0" Background="{StaticResource BackgroundSurfaceBrush}" Padding="16,12">
+            <TextBlock Text="LIBRARY" Style="{StaticResource CaptionTextStyle}" />
+        </Grid>
+
+        <!-- Pivot -->
+        <Pivot Grid.Row="1" x:Name="PivotMain" SelectionChanged="OnPivotSelectionChanged"
+               Background="{StaticResource BackgroundDeepBrush}"
+               Foreground="{StaticResource TextPrimaryBrush}">
+
+            <!-- ── Albums ── -->
+            <PivotItem Header="Albums">
+                <Grid>
+                    <ListView x:Name="AlbumsList"
+                              IsItemClickEnabled="True" SelectionMode="None"
+                              ItemClick="OnAlbumClick"
+                              Background="Transparent"
+                              ItemContainerStyle="{StaticResource TransparentListItemStyle}">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Border Padding="0,10,0,10"
+                                        BorderBrush="{StaticResource DividerBrush}"
+                                        BorderThickness="0,0,0,1">
+                                    <StackPanel>
+                                        <TextBlock Text="{Binding Name}"
+                                                   Style="{StaticResource BodyTextStyle}"
+                                                   TextTrimming="CharacterEllipsis" />
+                                        <TextBlock Text="{Binding ArtistName}"
+                                                   Style="{StaticResource SubtitleTextStyle}"
+                                                   Margin="0,2,0,0" />
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                    <ProgressRing x:Name="AlbumsProgress" IsActive="False" Width="40" Height="40"
+                                  Foreground="{StaticResource AccentBrush}"
+                                  HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </Grid>
+            </PivotItem>
+
+            <!-- ── Artists ── -->
+            <PivotItem Header="Artists">
+                <Grid>
+                    <ListView x:Name="ArtistsList"
+                              IsItemClickEnabled="True" SelectionMode="None"
+                              ItemClick="OnArtistClick"
+                              Background="Transparent"
+                              ItemContainerStyle="{StaticResource TransparentListItemStyle}">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Border Padding="0,12,0,12"
+                                        BorderBrush="{StaticResource DividerBrush}"
+                                        BorderThickness="0,0,0,1">
+                                    <TextBlock Text="{Binding Name}"
+                                               Style="{StaticResource BodyTextStyle}"
+                                               TextTrimming="CharacterEllipsis" />
+                                </Border>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                    <ProgressRing x:Name="ArtistsProgress" IsActive="False" Width="40" Height="40"
+                                  Foreground="{StaticResource AccentBrush}"
+                                  HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </Grid>
+            </PivotItem>
+
+            <!-- ── Songs ── -->
+            <PivotItem Header="Songs">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Button Grid.Row="0" x:Name="ShuffleAllBtn"
+                            Content="Shuffle All"
+                            Style="{StaticResource AccentButtonStyle}"
+                            HorizontalAlignment="Stretch"
+                            Margin="0,8,0,8"
+                            IsEnabled="False"
+                            Click="OnShuffleAllClick" />
+                    <ListView Grid.Row="1" x:Name="SongsList"
+                              IsItemClickEnabled="True" SelectionMode="None"
+                              ItemClick="OnSongClick"
+                              Background="Transparent"
+                              ItemContainerStyle="{StaticResource TransparentListItemStyle}">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Border Padding="0,10,0,10"
+                                        BorderBrush="{StaticResource DividerBrush}"
+                                        BorderThickness="0,0,0,1">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Grid.Column="0">
+                                            <TextBlock Text="{Binding Title}"
+                                                       Style="{StaticResource BodyTextStyle}"
+                                                       TextTrimming="CharacterEllipsis" />
+                                            <TextBlock Text="{Binding ArtistName}"
+                                                       Style="{StaticResource SubtitleTextStyle}"
+                                                       Margin="0,2,0,0" />
+                                        </StackPanel>
+                                        <TextBlock Grid.Column="1"
+                                                   Text="{Binding DurationText}"
+                                                   Style="{StaticResource CaptionTextStyle}"
+                                                   VerticalAlignment="Center"
+                                                   Margin="8,0,0,0" />
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                    <ProgressRing x:Name="SongsProgress" Grid.RowSpan="2" IsActive="False"
+                                  Width="40" Height="40"
+                                  Foreground="{StaticResource AccentBrush}"
+                                  HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </Grid>
+            </PivotItem>
+
+            <!-- ── Genres ── -->
+            <PivotItem Header="Genres">
+                <Grid>
+                    <ListView x:Name="GenresList"
+                              IsItemClickEnabled="True" SelectionMode="None"
+                              ItemClick="OnGenreClick"
+                              Background="Transparent"
+                              ItemContainerStyle="{StaticResource TransparentListItemStyle}">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Border Padding="0,12,0,12"
+                                        BorderBrush="{StaticResource DividerBrush}"
+                                        BorderThickness="0,0,0,1">
+                                    <TextBlock Text="{Binding Name}"
+                                               Style="{StaticResource BodyTextStyle}"
+                                               TextTrimming="CharacterEllipsis" />
+                                </Border>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                    <ProgressRing x:Name="GenresProgress" IsActive="False" Width="40" Height="40"
+                                  Foreground="{StaticResource AccentBrush}"
+                                  HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </Grid>
+            </PivotItem>
+
+            <!-- ── Playlists ── -->
+            <PivotItem Header="Playlists">
+                <Grid>
+                    <ListView x:Name="PlaylistsList"
+                              IsItemClickEnabled="True" SelectionMode="None"
+                              ItemClick="OnPlaylistClick"
+                              Background="Transparent"
+                              ItemContainerStyle="{StaticResource TransparentListItemStyle}">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Border Padding="0,12,0,12"
+                                        BorderBrush="{StaticResource DividerBrush}"
+                                        BorderThickness="0,0,0,1">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0" Text="{Binding Name}"
+                                                   Style="{StaticResource BodyTextStyle}"
+                                                   TextTrimming="CharacterEllipsis" />
+                                        <TextBlock Grid.Column="1" Text="{Binding SongCount}"
+                                                   Style="{StaticResource CaptionTextStyle}"
+                                                   VerticalAlignment="Center"
+                                                   Margin="8,0,0,0" />
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                    <ProgressRing x:Name="PlaylistsProgress" IsActive="False" Width="40" Height="40"
+                                  Foreground="{StaticResource AccentBrush}"
+                                  HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </Grid>
+            </PivotItem>
+
+            <!-- ── Starred ── -->
+            <PivotItem Header="Starred">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Button Grid.Row="0" x:Name="ShuffleStarredBtn"
+                            Content="Shuffle Starred"
+                            Style="{StaticResource AccentButtonStyle}"
+                            HorizontalAlignment="Stretch"
+                            Margin="0,8,0,8"
+                            IsEnabled="False"
+                            Click="OnShuffleStarredClick" />
+                    <ListView Grid.Row="1" x:Name="StarredList"
+                              IsItemClickEnabled="True" SelectionMode="None"
+                              ItemClick="OnStarredSongClick"
+                              Background="Transparent"
+                              ItemContainerStyle="{StaticResource TransparentListItemStyle}">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Border Padding="0,10,0,10"
+                                        BorderBrush="{StaticResource DividerBrush}"
+                                        BorderThickness="0,0,0,1">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Grid.Column="0">
+                                            <TextBlock Text="{Binding Title}"
+                                                       Style="{StaticResource BodyTextStyle}"
+                                                       TextTrimming="CharacterEllipsis" />
+                                            <TextBlock Text="{Binding ArtistName}"
+                                                       Style="{StaticResource SubtitleTextStyle}"
+                                                       Margin="0,2,0,0" />
+                                        </StackPanel>
+                                        <TextBlock Grid.Column="1"
+                                                   Text="{Binding DurationText}"
+                                                   Style="{StaticResource CaptionTextStyle}"
+                                                   VerticalAlignment="Center"
+                                                   Margin="8,0,0,0" />
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                    <ProgressRing x:Name="StarredProgress" Grid.RowSpan="2" IsActive="False"
+                                  Width="40" Height="40"
+                                  Foreground="{StaticResource AccentBrush}"
+                                  HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </Grid>
+            </PivotItem>
+
+        </Pivot>
+    </Grid>
+</Page>

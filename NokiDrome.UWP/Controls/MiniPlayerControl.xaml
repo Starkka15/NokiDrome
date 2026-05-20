@@ -1,0 +1,55 @@
+<UserControl
+    x:Class="NokiDrome.UWP.Controls.MiniPlayerControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Grid x:Name="Root" Visibility="Collapsed"
+          Background="{StaticResource BackgroundCardBrush}"
+          Tapped="OnRootTapped">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="3" />
+            <RowDefinition Height="61" />
+        </Grid.RowDefinitions>
+
+        <!-- Position track -->
+        <Rectangle Grid.Row="0" Fill="{StaticResource DividerBrush}" />
+        <Rectangle Grid.Row="0" x:Name="PositionFill"
+                   Fill="{StaticResource AccentBrush}"
+                   HorizontalAlignment="Left" Width="0" />
+
+        <!-- Top divider -->
+        <Rectangle Grid.Row="0" Grid.RowSpan="2" Height="1"
+                   VerticalAlignment="Top" Fill="{StaticResource DividerBrush}" />
+
+        <!-- Content -->
+        <Grid Grid.Row="1" Padding="12,0,4,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="44" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="48" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Cover art -->
+            <Border Grid.Column="0" Width="40" Height="40" CornerRadius="4"
+                    Background="{StaticResource BackgroundSurfaceBrush}"
+                    VerticalAlignment="Center">
+                <Image x:Name="ThumbImage" Stretch="UniformToFill" />
+            </Border>
+
+            <!-- Title / Artist -->
+            <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="12,0,4,0">
+                <TextBlock x:Name="TitleLabel"
+                           Style="{StaticResource BodyTextStyle}"
+                           TextTrimming="CharacterEllipsis" />
+                <TextBlock x:Name="ArtistLabel"
+                           Style="{StaticResource SubtitleTextStyle}"
+                           Margin="0,2,0,0" />
+            </StackPanel>
+
+            <!-- Play / Pause -->
+            <Button Grid.Column="2" x:Name="PlayPauseBtn"
+                    Style="{StaticResource IconButtonStyle}"
+                    Click="OnPlayPauseClick" />
+        </Grid>
+    </Grid>
+</UserControl>

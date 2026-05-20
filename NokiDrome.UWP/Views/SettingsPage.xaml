@@ -1,0 +1,108 @@
+<Page
+    x:Class="NokiDrome.UWP.Views.SettingsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Grid Background="{StaticResource BackgroundDeepBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Grid Grid.Row="0" Background="{StaticResource BackgroundSurfaceBrush}" Padding="16,12">
+            <TextBlock Text="Settings" Style="{StaticResource TitleTextStyle}" />
+        </Grid>
+
+        <!-- Content -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <StackPanel Padding="16,16,16,32">
+
+                <!-- Server section -->
+                <TextBlock Text="NAVIDROME SERVER"
+                           Style="{StaticResource CaptionTextStyle}"
+                           Margin="0,0,0,10" />
+
+                <Border Background="{StaticResource BackgroundCardBrush}"
+                        CornerRadius="8" Padding="16" Margin="0,0,0,12">
+                    <StackPanel>
+
+                        <TextBlock Text="Server URL" Style="{StaticResource SubtitleTextStyle}"
+                                   Margin="0,0,0,6" />
+                        <TextBox x:Name="UrlBox"
+                                 Style="{StaticResource DarkTextBoxStyle}"
+                                 PlaceholderText="http://192.168.1.x:4533"
+                                 InputScope="Url"
+                                 Margin="0,0,0,14" />
+
+                        <TextBlock Text="Username" Style="{StaticResource SubtitleTextStyle}"
+                                   Margin="0,0,0,6" />
+                        <TextBox x:Name="UsernameBox"
+                                 Style="{StaticResource DarkTextBoxStyle}"
+                                 PlaceholderText="admin"
+                                 Margin="0,0,0,14" />
+
+                        <TextBlock Text="Password" Style="{StaticResource SubtitleTextStyle}"
+                                   Margin="0,0,0,6" />
+                        <PasswordBox x:Name="PasswordBox"
+                                     Background="{StaticResource BackgroundCardBrush}"
+                                     Foreground="{StaticResource TextPrimaryBrush}"
+                                     BorderBrush="{StaticResource DividerBrush}"
+                                     BorderThickness="1"
+                                     Padding="10,8"
+                                     FontSize="14"
+                                     PlaceholderText="password"
+                                     Margin="0,0,0,16" />
+
+                        <!-- Test Connection -->
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock x:Name="TestResultLabel"
+                                       Grid.Column="0"
+                                       Style="{StaticResource SubtitleTextStyle}"
+                                       VerticalAlignment="Center"
+                                       TextWrapping="Wrap" />
+
+                            <Button x:Name="TestBtn"
+                                    Grid.Column="1"
+                                    Style="{StaticResource GhostButtonStyle}"
+                                    Content="Test Connection"
+                                    Click="OnTestClick" />
+                        </Grid>
+
+                    </StackPanel>
+                </Border>
+
+                <!-- Save button -->
+                <Button x:Name="SaveBtn"
+                        Style="{StaticResource AccentButtonStyle}"
+                        HorizontalAlignment="Stretch"
+                        Content="Save"
+                        Click="OnSaveClick" />
+
+                <!-- About section -->
+                <TextBlock Text="ABOUT"
+                           Style="{StaticResource CaptionTextStyle}"
+                           Margin="0,28,0,10" />
+
+                <Border Background="{StaticResource BackgroundCardBrush}"
+                        CornerRadius="8" Padding="16">
+                    <StackPanel>
+                        <TextBlock Text="NokiDrome" Style="{StaticResource BodyTextStyle}" />
+                        <TextBlock Text="Navidrome client for Windows 10 Mobile"
+                                   Style="{StaticResource SubtitleTextStyle}"
+                                   Margin="0,2,0,0" />
+                        <TextBlock Text="Version 1.0.0"
+                                   Style="{StaticResource CaptionTextStyle}"
+                                   Margin="0,8,0,0" />
+                    </StackPanel>
+                </Border>
+
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Page>

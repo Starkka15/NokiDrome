@@ -1,0 +1,87 @@
+<Page
+    x:Class="NokiDrome.UWP.Views.ShellPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:NokiDrome.UWP.Controls">
+
+    <Grid Background="{StaticResource BackgroundDeepBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="56" />
+        </Grid.RowDefinitions>
+
+        <!-- Content frame -->
+        <Frame x:Name="ContentFrame" Grid.Row="0" />
+
+        <!-- Mini player (hidden when nothing is playing) -->
+        <controls:MiniPlayerControl x:Name="MiniPlayer" Grid.Row="1" />
+
+        <!-- Bottom navigation bar -->
+        <Grid Grid.Row="2" Background="{StaticResource BackgroundSurfaceBrush}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Top border line -->
+            <Rectangle Grid.ColumnSpan="4" Height="1" VerticalAlignment="Top"
+                       Fill="{StaticResource DividerBrush}" />
+
+            <Button Grid.Column="0" Style="{StaticResource NavButtonStyle}"
+                    x:Name="NavLibrary" Click="OnNavLibrary">
+                <StackPanel HorizontalAlignment="Center">
+                    <TextBlock Text="&#xE93C;" FontFamily="Segoe MDL2 Assets" FontSize="20"
+                               HorizontalAlignment="Center" Margin="0,0,0,2"
+                               x:Name="NavLibraryIcon"
+                               Foreground="{StaticResource AccentBrush}" />
+                    <TextBlock Text="Library" FontSize="10" HorizontalAlignment="Center"
+                               x:Name="NavLibraryLabel"
+                               Foreground="{StaticResource AccentBrush}" />
+                </StackPanel>
+            </Button>
+
+            <Button Grid.Column="1" Style="{StaticResource NavButtonStyle}"
+                    x:Name="NavNowPlaying" Click="OnNavNowPlaying">
+                <StackPanel HorizontalAlignment="Center">
+                    <TextBlock Text="&#xE768;" FontFamily="Segoe MDL2 Assets" FontSize="20"
+                               HorizontalAlignment="Center" Margin="0,0,0,2"
+                               x:Name="NavNowPlayingIcon"
+                               Foreground="{StaticResource TextSecondaryBrush}" />
+                    <TextBlock Text="Now Playing" FontSize="10" HorizontalAlignment="Center"
+                               x:Name="NavNowPlayingLabel"
+                               Foreground="{StaticResource TextSecondaryBrush}" />
+                </StackPanel>
+            </Button>
+
+            <Button Grid.Column="2" Style="{StaticResource NavButtonStyle}"
+                    x:Name="NavSearch" Click="OnNavSearch">
+                <StackPanel HorizontalAlignment="Center">
+                    <TextBlock Text="&#xE721;" FontFamily="Segoe MDL2 Assets" FontSize="20"
+                               HorizontalAlignment="Center" Margin="0,0,0,2"
+                               x:Name="NavSearchIcon"
+                               Foreground="{StaticResource TextSecondaryBrush}" />
+                    <TextBlock Text="Search" FontSize="10" HorizontalAlignment="Center"
+                               x:Name="NavSearchLabel"
+                               Foreground="{StaticResource TextSecondaryBrush}" />
+                </StackPanel>
+            </Button>
+
+            <Button Grid.Column="3" Style="{StaticResource NavButtonStyle}"
+                    x:Name="NavSettings" Click="OnNavSettings">
+                <StackPanel HorizontalAlignment="Center">
+                    <TextBlock Text="&#xE713;" FontFamily="Segoe MDL2 Assets" FontSize="20"
+                               HorizontalAlignment="Center" Margin="0,0,0,2"
+                               x:Name="NavSettingsIcon"
+                               Foreground="{StaticResource TextSecondaryBrush}" />
+                    <TextBlock Text="Settings" FontSize="10" HorizontalAlignment="Center"
+                               x:Name="NavSettingsLabel"
+                               Foreground="{StaticResource TextSecondaryBrush}" />
+                </StackPanel>
+            </Button>
+
+        </Grid>
+    </Grid>
+</Page>
