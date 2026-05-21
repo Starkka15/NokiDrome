@@ -10,9 +10,7 @@ namespace NokiDrome.UWP.Services
         {
             if (song == null) return;
 
-            string artUrl = Escape(string.IsNullOrEmpty(song.CoverArtId)
-                ? "ms-appx:///Assets/Square150x150Logo.png"
-                : App.Subsonic.GetCoverArtUrl(song.CoverArtId, 150));
+            string artUrl = Escape("ms-appx:///Assets/Square150x150Logo.png");
 
             string title  = Escape(song.Title);
             string artist = Escape(song.ArtistName);

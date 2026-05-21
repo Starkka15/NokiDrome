@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using NokiDrome.UWP.Models;
 using NokiDrome.UWP.Services;
@@ -26,20 +27,34 @@ namespace NokiDrome.UWP.ViewModels
             Password = server.Password;
         }
 
-        public void Save()
+        public bool Save()
         {
+            var url = Url?.Trim() ?? "";
+            if (!Uri.TryCreate(url, UriKind.Absolute, out var parsed) ||
+                (parsed.Scheme != "http" && parsed.Scheme != "https"))
+            {
+                TestResult = "Server URL must start with http:// or https://";
+                return false;
+            }
+            var host = parsed.Host.ToLowerInvariant().TrimEnd('.');
+            if (host == "localhost" || host == "::1" || host.StartsWith("127."))
+            {
+                TestResult = "Loopback addresses are not supported";
+                return false;
+            }
             App.Settings.SaveServer(new SubsonicServer
             {
-                Url      = Url.Trim(),
+                Url      = url,
                 Username = Username.Trim(),
                 Password = Password
             });
             App.Subsonic.Refresh();
+            return true;
         }
 
         public async Task TestConnectionAsync()
         {
-            Save();
+            if (!Save()) return;
             IsTesting  = true;
             TestResult = "Testing...";
             var ok = await App.Subsonic.PingAsync();

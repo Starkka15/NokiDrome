@@ -40,7 +40,7 @@ namespace NokiDrome.UWP
         {
             e.Handled = true;
             var dialog = new Windows.UI.Popups.MessageDialog(
-                e.Exception?.ToString() ?? e.Message, "Unhandled Error");
+                "An unexpected error occurred. Please restart the app.", "Error");
             await dialog.ShowAsync();
         }
 
@@ -51,7 +51,7 @@ namespace NokiDrome.UWP
                 Window.Current.Content = new Frame();
                 Window.Current.Activate();
                 var _ = new Windows.UI.Popups.MessageDialog(
-                    _startupException.ToString(), "Startup Error").ShowAsync();
+                    "Failed to start. Please reinstall the app.", "Startup Error").ShowAsync();
                 return;
             }
 

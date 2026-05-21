@@ -40,7 +40,11 @@ Write-Host "Packing..."
 if ($LASTEXITCODE -ne 0) { Write-Error "MakeAppx failed"; exit 1 }
 
 Write-Host "Signing..."
-& $signtool sign /fd SHA256 /f $pfxPath /p DevOnly $appxOut
+$pfxPassword = $env:NOKIDROME_PFX_PASSWORD
+if ([string]::IsNullOrEmpty($pfxPassword)) {
+    $pfxPassword = Read-Host "Enter PFX password"
+}
+& $signtool sign /fd SHA256 /f $pfxPath /p $pfxPassword $appxOut
 if ($LASTEXITCODE -ne 0) { Write-Error "SignTool failed"; exit 1 }
 
 Write-Host "Done. APPX at: $appxOut"

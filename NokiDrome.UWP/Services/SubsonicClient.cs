@@ -49,7 +49,8 @@ namespace NokiDrome.UWP.Services
         public string BuildUrl(string endpoint, params string[] extra)
         {
             var server = _settings.GetServer();
-            var salt   = Guid.NewGuid().ToString("N").Substring(0, 10);
+            var saltBuf = Windows.Security.Cryptography.CryptographicBuffer.GenerateRandom(16);
+            var salt    = Windows.Security.Cryptography.CryptographicBuffer.EncodeToHexString(saltBuf);
             var token  = Md5Hex(server.Password + salt);
 
             var sb = new StringBuilder();
@@ -63,7 +64,7 @@ namespace NokiDrome.UWP.Services
             sb.Append("&f=json");
 
             for (int i = 0; i + 1 < extra.Length; i += 2)
-                sb.Append("&").Append(extra[i]).Append("=").Append(Uri.EscapeDataString(extra[i + 1]));
+                sb.Append("&").Append(Uri.EscapeDataString(extra[i])).Append("=").Append(Uri.EscapeDataString(extra[i + 1]));
 
             return sb.ToString();
         }
