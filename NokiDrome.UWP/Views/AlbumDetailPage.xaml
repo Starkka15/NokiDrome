@@ -44,26 +44,35 @@
             </StackPanel>
         </Grid>
 
-        <!-- Play / Shuffle buttons -->
-        <Grid Grid.Row="2" Padding="16,10,16,10">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="8" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" x:Name="PlayAllBtn"
-                    Content="Play All"
-                    Style="{StaticResource AccentButtonStyle}"
-                    HorizontalAlignment="Stretch"
-                    Click="OnPlayAllClick"
-                    IsEnabled="False" />
-            <Button Grid.Column="2" x:Name="ShuffleBtn"
-                    Content="Shuffle"
+        <!-- Play / Shuffle / Download buttons -->
+        <StackPanel Grid.Row="2" Padding="16,10,16,10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="8" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" x:Name="PlayAllBtn"
+                        Content="Play All"
+                        Style="{StaticResource AccentButtonStyle}"
+                        HorizontalAlignment="Stretch"
+                        Click="OnPlayAllClick"
+                        IsEnabled="False" />
+                <Button Grid.Column="2" x:Name="ShuffleBtn"
+                        Content="Shuffle"
+                        Style="{StaticResource GhostButtonStyle}"
+                        HorizontalAlignment="Stretch"
+                        Click="OnShuffleClick"
+                        IsEnabled="False" />
+            </Grid>
+            <Button x:Name="DownloadBtn"
+                    Content="Download for offline"
                     Style="{StaticResource GhostButtonStyle}"
                     HorizontalAlignment="Stretch"
-                    Click="OnShuffleClick"
+                    Margin="0,8,0,0"
+                    Click="OnDownloadClick"
                     IsEnabled="False" />
-        </Grid>
+        </StackPanel>
 
         <!-- Song list -->
         <ListView Grid.Row="3" x:Name="SongsList"

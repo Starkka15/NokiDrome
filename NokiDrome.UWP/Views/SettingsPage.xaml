@@ -84,6 +84,59 @@
                         Content="Save"
                         Click="OnSaveClick" />
 
+                <!-- Offline section -->
+                <TextBlock Text="OFFLINE"
+                           Style="{StaticResource CaptionTextStyle}"
+                           Margin="0,28,0,10" />
+
+                <Border Background="{StaticResource BackgroundCardBrush}"
+                        CornerRadius="8" Padding="16" Margin="0,0,0,12">
+                    <StackPanel>
+
+                        <TextBlock Text="Download location" Style="{StaticResource SubtitleTextStyle}"
+                                   Margin="0,0,0,6" />
+                        <RadioButton x:Name="StorageInternalRadio"
+                                     Content="Internal storage"
+                                     GroupName="OfflineStorage"
+                                     Checked="OnStorageChanged"
+                                     Foreground="{StaticResource TextPrimaryBrush}" />
+                        <RadioButton x:Name="StorageSdRadio"
+                                     Content="SD card"
+                                     GroupName="OfflineStorage"
+                                     Checked="OnStorageChanged"
+                                     Foreground="{StaticResource TextPrimaryBrush}"
+                                     Margin="0,0,0,8" />
+
+                        <Grid Margin="0,8,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                <TextBlock Text="Auto-cache played tracks"
+                                           Style="{StaticResource BodyTextStyle}" />
+                                <TextBlock Text="Save songs for offline as you listen"
+                                           Style="{StaticResource SubtitleTextStyle}"
+                                           Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ToggleSwitch x:Name="AutoCacheToggle"
+                                          Grid.Column="1"
+                                          Toggled="OnAutoCacheToggled" />
+                        </Grid>
+
+                        <TextBlock x:Name="OfflineCountLabel"
+                                   Style="{StaticResource SubtitleTextStyle}"
+                                   Margin="0,8,0,12" />
+
+                        <Button x:Name="ClearDownloadsBtn"
+                                Style="{StaticResource GhostButtonStyle}"
+                                HorizontalAlignment="Stretch"
+                                Content="Clear all downloads"
+                                Click="OnClearDownloadsClick" />
+
+                    </StackPanel>
+                </Border>
+
                 <!-- About section -->
                 <TextBlock Text="ABOUT"
                            Style="{StaticResource CaptionTextStyle}"
@@ -96,7 +149,7 @@
                         <TextBlock Text="Navidrome client for Windows 10 Mobile"
                                    Style="{StaticResource SubtitleTextStyle}"
                                    Margin="0,2,0,0" />
-                        <TextBlock Text="Version 1.0.0"
+                        <TextBlock Text="Version 1.2.0"
                                    Style="{StaticResource CaptionTextStyle}"
                                    Margin="0,8,0,0" />
                     </StackPanel>

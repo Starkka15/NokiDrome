@@ -14,6 +14,7 @@ namespace NokiDrome.UWP
         public static SettingsService   Settings   { get; private set; }
         public static PlayerService     Player     { get; private set; }
         public static SubsonicClient    Subsonic   { get; private set; }
+        public static OfflineService    Offline    { get; private set; }
 
         private static Exception _startupException;
 
@@ -27,8 +28,12 @@ namespace NokiDrome.UWP
 
                 Settings  = new SettingsService();
                 Subsonic  = new SubsonicClient(Settings);
+                Offline   = new OfflineService(Settings, Subsonic);
                 Player    = new PlayerService();
                 Navigation = new NavigationService();
+                // Load the offline index in the background so IsOffline() is ready
+                // by the time playback starts.
+                var _ = Offline.InitAsync();
             }
             catch (Exception ex)
             {

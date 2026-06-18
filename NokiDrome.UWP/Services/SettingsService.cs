@@ -4,14 +4,37 @@ using NokiDrome.UWP.Models;
 
 namespace NokiDrome.UWP.Services
 {
+    // Where downloaded audio is stored.
+    public enum OfflineStorage { Internal, SdCard }
+
     public class SettingsService
     {
-        private const string ServerUrlKey  = "server_url";
-        private const string UsernameKey   = "server_username";
-        private const string VaultResource = "NokiDrome";
+        private const string ServerUrlKey      = "server_url";
+        private const string UsernameKey       = "server_username";
+        private const string VaultResource     = "NokiDrome";
+        private const string OfflineStorageKey = "offline_storage";
+        private const string AutoCacheKey      = "offline_autocache";
 
         private readonly ApplicationDataContainer _local =
             ApplicationData.Current.LocalSettings;
+
+        // ── Offline settings ──────────────────────────────────────────────────
+
+        public OfflineStorage OfflineStorageLocation
+        {
+            get => (_local.Values[OfflineStorageKey] as string) == "sd"
+                ? OfflineStorage.SdCard
+                : OfflineStorage.Internal;
+            set => _local.Values[OfflineStorageKey] =
+                value == OfflineStorage.SdCard ? "sd" : "internal";
+        }
+
+        // When on, tracks are cached to offline storage as they play.
+        public bool AutoCache
+        {
+            get => _local.Values[AutoCacheKey] as bool? ?? false;
+            set => _local.Values[AutoCacheKey] = value;
+        }
 
         public SubsonicServer GetServer()
         {

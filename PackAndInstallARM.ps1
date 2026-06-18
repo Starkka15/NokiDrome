@@ -18,6 +18,10 @@ Write-Host "Building ARM layout from ilc/..."
 # Manifest — strip Debug VCLibs dependency (not present in Release packages)
 $manifest = Get-Content "$ilcDir\AppxManifest.xml" -Raw
 $manifest = $manifest -replace '\s*<PackageDependency Name="Microsoft\.VCLibs\.140\.00\.Debug"[^/]*/>', ''
+# Lower MinVersion to 15063 — W10M phones report build 15254 (< 16299), so a
+# 16299 minimum blocks install on standard W10M devices. Built against 16299,
+# runs on 15063+.
+$manifest = $manifest -replace 'MinVersion="10\.0\.16299\.0"', 'MinVersion="10.0.15063.0"'
 Set-Content "$layout\AppxManifest.xml" $manifest -Encoding UTF8
 
 # App binaries

@@ -75,6 +75,13 @@ namespace NokiDrome.UWP.Services
         public string GetCoverArtUrl(string coverArtId, int size = 300)
             => BuildUrl("getCoverArt", "id", coverArtId, "size", size.ToString());
 
+        // Original, untranscoded file — used for offline downloads.
+        public string GetDownloadUrl(string songId)
+            => BuildUrl("download", "id", songId);
+
+        public async Task<byte[]> DownloadBytesAsync(string songId)
+            => await _http.GetByteArrayAsync(GetDownloadUrl(songId));
+
         // ── API calls ─────────────────────────────────────────────────────────
 
         public async Task<bool> PingAsync()
@@ -370,7 +377,8 @@ namespace NokiDrome.UWP.Services
             Duration    = o.Value<int>("duration"),
             BitRate     = o.Value<int>("bitRate"),
             CoverArtId  = o.Value<string>("coverArt") ?? "",
-            IsStarred   = o["starred"] != null
+            IsStarred   = o["starred"] != null,
+            Suffix      = o.Value<string>("suffix")   ?? ""
         };
 
         private static Playlist ParsePlaylist(JObject o) => o == null ? null : new Playlist

@@ -13,6 +13,11 @@ namespace NokiDrome.UWP.Services
         private readonly SystemMediaTransportControls _smtc;
         private PlayQueue _queue = new PlayQueue();
 
+        // Guards the MediaFailed -> Next() cascade: a transient failure shouldn't
+        // race through the whole queue. Reset whenever a track actually starts.
+        private int _consecutiveFailures;
+        private const int MaxConsecutiveFailures = 3;
+
         // ── Events ────────────────────────────────────────────────────────────
 
         public event EventHandler<Song>              TrackChanged;
@@ -34,6 +39,14 @@ namespace NokiDrome.UWP.Services
         {
             _player = new MediaPlayer();
             _player.AudioCategory = MediaPlayerAudioCategory.Media;
+
+            // Disable the built-in command manager. With a single MediaSource (we drive
+            // the queue manually, not via MediaPlaybackList) it has no next/previous item,
+            // so it swallows the SMTC/Bluetooth Next & Previous commands before our manual
+            // ButtonPressed handler sees them — leaving only Play/Pause working. Turning it
+            // off routes every SMTC button to OnSmtcButtonPressed below.
+            _player.CommandManager.IsEnabled = false;
+
             _player.MediaEnded   += OnMediaEnded;
             _player.MediaFailed  += OnMediaFailed;
             _player.PlaybackSession.PlaybackStateChanged += OnPlaybackStateChanged;
@@ -129,13 +142,42 @@ namespace NokiDrome.UWP.Services
             if (index < 0 || index >= _queue.Items.Count) return;
             _queue.CurrentIndex = index;
             var song = _queue.CurrentSong;
-            var url  = App.Subsonic.GetStreamUrl(song.Id);
-            _player.Source = MediaSource.CreateFromUri(new Uri(url));
-            _player.Play();
+
+            // Metadata/UI update immediately; the audio source is resolved async
+            // (a cached local file may need to be opened before playback).
             UpdateSmtc(song);
             TrackChanged?.Invoke(this, song);
             TileService.Update(song);
             var nowPlaying = App.Subsonic.ScrobbleAsync(song.Id, submission: false);
+
+            var _ = SetSourceAndPlayAsync(song);
+        }
+
+        private async System.Threading.Tasks.Task SetSourceAndPlayAsync(Song song)
+        {
+            MediaSource source = null;
+
+            // Prefer a downloaded copy — works with no network.
+            if (App.Offline != null && App.Offline.IsOffline(song.Id))
+            {
+                var file = await App.Offline.GetFileAsync(song.Id);
+                if (file != null) source = MediaSource.CreateFromStorageFile(file);
+            }
+
+            if (source == null)
+                source = MediaSource.CreateFromUri(new Uri(App.Subsonic.GetStreamUrl(song.Id)));
+
+            // Guard against a newer PlayAt having superseded this call.
+            if (_queue.CurrentSong?.Id != song.Id) return;
+
+            _player.Source = source;
+            _player.Play();
+
+            // Auto-cache the track as it plays, if enabled and not already stored.
+            if (App.Offline != null && App.Settings.AutoCache && !App.Offline.IsOffline(song.Id))
+            {
+                var cache = App.Offline.DownloadAsync(song);
+            }
         }
 
         // ── Transport ─────────────────────────────────────────────────────────
@@ -164,11 +206,22 @@ namespace NokiDrome.UWP.Services
         }
 
         private void OnMediaFailed(MediaPlayer sender, MediaPlayerFailedEventArgs args)
-            => Next();
+        {
+            // Stop auto-advancing once several tracks fail in a row — otherwise a
+            // network drop skips through the entire queue in a fraction of a second.
+            if (++_consecutiveFailures >= MaxConsecutiveFailures)
+            {
+                _consecutiveFailures = 0;
+                Pause();
+                return;
+            }
+            Next();
+        }
 
         private void OnPlaybackStateChanged(MediaPlaybackSession session, object args)
         {
             var state = session.PlaybackState;
+            if (state == MediaPlaybackState.Playing) _consecutiveFailures = 0;
             StateChanged?.Invoke(this, state);
             _smtc.PlaybackStatus = state == MediaPlaybackState.Playing
                 ? MediaPlaybackStatus.Playing
@@ -199,6 +252,19 @@ namespace NokiDrome.UWP.Services
             updater.MusicProperties.Artist      = song.ArtistName;
             updater.MusicProperties.AlbumTitle  = song.AlbumName;
             updater.MusicProperties.TrackNumber = (uint)song.TrackNumber;
+
+            // Album art on the lock screen / Bluetooth display.
+            if (!string.IsNullOrEmpty(song.CoverArtId))
+            {
+                try
+                {
+                    var artUrl = App.Subsonic.GetCoverArtUrl(song.CoverArtId);
+                    updater.Thumbnail = Windows.Storage.Streams.RandomAccessStreamReference
+                        .CreateFromUri(new Uri(artUrl));
+                }
+                catch { /* leave thumbnail unset on a bad art id/url */ }
+            }
+
             updater.Update();
         }
     }

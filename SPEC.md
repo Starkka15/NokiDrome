@@ -252,9 +252,23 @@ repeated until exhausted, builds flat list, Fisher-Yates shuffle, sets as queue.
 
 ## Offline / Caching
 
-**Out of scope for v1.** Stream-only. Future work:
-- `download` endpoint to cache tracks to `ApplicationData.Current.LocalFolder`
-- Pin album for offline
+**Implemented (v1.2).** `OfflineService` caches original (untranscoded) tracks via the
+Subsonic `download` endpoint.
+
+- **Storage location** chosen in Settings: Internal (`ApplicationData.LocalFolder\NokiDrome\`)
+  or SD card (`KnownFolders.RemovableDevices` → first device → `NokiDrome\`). SD requires the
+  `removableStorage` capability + audio `FileTypeAssociation` (declared in the manifest).
+- **Manual pin**: "Download for offline" button on `AlbumDetailPage` (`DownloadManyAsync`).
+- **Auto-cache** (Settings toggle): tracks are saved as they play (`PlayerService` →
+  `OfflineService.DownloadAsync` on `PlayAt`).
+- **Index** of cached songs is persisted as JSON in the internal app folder
+  (`offline_index.json`) so the Offline list survives an absent SD card. Loaded at startup.
+- **Playback** prefers a local file when present (`MediaSource.CreateFromStorageFile`),
+  else streams — so pinned music plays with no network.
+- **Offline page** (bottom-nav tab): lists downloaded tracks, play / shuffle / remove.
+  Settings has a "Clear all downloads" action.
+
+Filenames: `{songId}.{suffix}` (suffix from the Subsonic `song.suffix` field).
 
 ---
 
@@ -342,3 +356,15 @@ Report `now playing` on track start, `submission` at 50% or 4 min played.
 
 ### T13 — Polish + ARM deploy
 Performance pass, Lumia 1520 layout verification, sideload and test.
+
+### T14 — Offline caching (v1.2, DONE)
+`OfflineService` (download/remove/index/storage-resolution), Settings storage picker +
+auto-cache toggle + clear, Offline nav page, album pin button, offline-aware `PlayAt`.
+Manifest: `removableStorage` + audio file-type associations.
+
+### T15 — Playback robustness (v1.2, DONE)
+- `MediaFailed` → `Next()` cascade guard (stop after 3 consecutive failures).
+- SMTC `Thumbnail` (album art on lock screen / Bluetooth).
+- `MediaPlayer.CommandManager.IsEnabled = false` so SMTC/Bluetooth **Next & Previous**
+  route to our handler (previously only Play/Pause worked — the command manager swallowed
+  next/prev with a single `MediaSource`).

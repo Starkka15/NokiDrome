@@ -7,7 +7,7 @@ namespace NokiDrome.UWP.Views
 {
     public sealed partial class ShellPage : Page
     {
-        private enum Tab { Library, NowPlaying, Search, Settings }
+        private enum Tab { Library, Offline, NowPlaying, Search, Settings }
         private Tab _activeTab = Tab.Library;
 
         public ShellPage()
@@ -51,6 +51,7 @@ namespace NokiDrome.UWP.Views
         }
 
         private void OnNavLibrary(object sender, RoutedEventArgs e)    => NavigateTo(Tab.Library);
+        private void OnNavOffline(object sender, RoutedEventArgs e)    => NavigateTo(Tab.Offline);
         private void OnNavNowPlaying(object sender, RoutedEventArgs e) => NavigateTo(Tab.NowPlaying);
         private void OnNavSearch(object sender, RoutedEventArgs e)     => NavigateTo(Tab.Search);
         private void OnNavSettings(object sender, RoutedEventArgs e)   => NavigateTo(Tab.Settings);
@@ -62,6 +63,7 @@ namespace NokiDrome.UWP.Views
             switch (tab)
             {
                 case Tab.Library:    ContentFrame.Navigate(typeof(LibraryPage));    break;
+                case Tab.Offline:    ContentFrame.Navigate(typeof(OfflinePage));    break;
                 case Tab.NowPlaying: ContentFrame.Navigate(typeof(NowPlayingPage)); break;
                 case Tab.Search:     ContentFrame.Navigate(typeof(SearchPage));     break;
                 case Tab.Settings:   ContentFrame.Navigate(typeof(SettingsPage));   break;
@@ -75,6 +77,8 @@ namespace NokiDrome.UWP.Views
 
             NavLibraryIcon.Foreground    = _activeTab == Tab.Library    ? accent : secondary;
             NavLibraryLabel.Foreground   = _activeTab == Tab.Library    ? accent : secondary;
+            NavOfflineIcon.Foreground    = _activeTab == Tab.Offline    ? accent : secondary;
+            NavOfflineLabel.Foreground   = _activeTab == Tab.Offline    ? accent : secondary;
             NavNowPlayingIcon.Foreground  = _activeTab == Tab.NowPlaying ? accent : secondary;
             NavNowPlayingLabel.Foreground = _activeTab == Tab.NowPlaying ? accent : secondary;
             NavSearchIcon.Foreground     = _activeTab == Tab.Search     ? accent : secondary;

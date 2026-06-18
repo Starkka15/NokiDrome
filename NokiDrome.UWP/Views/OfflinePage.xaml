@@ -1,0 +1,70 @@
+<Page
+    x:Class="NokiDrome.UWP.Views.OfflinePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Grid Background="{StaticResource BackgroundDeepBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Grid Grid.Row="0" Background="{StaticResource BackgroundSurfaceBrush}" Padding="16,12">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" Text="Offline" Style="{StaticResource TitleTextStyle}" />
+            <Button Grid.Column="1" x:Name="ShuffleBtn"
+                    Style="{StaticResource GhostButtonStyle}"
+                    Content="Shuffle"
+                    Click="OnShuffleClick" />
+        </Grid>
+
+        <!-- Downloaded songs -->
+        <ListView Grid.Row="1" x:Name="SongsList"
+                  IsItemClickEnabled="True" SelectionMode="None"
+                  ItemClick="OnSongClick"
+                  Background="Transparent"
+                  Padding="16,8,16,16"
+                  ItemContainerStyle="{StaticResource TransparentListItemStyle}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Border Padding="0,10,0,10"
+                            BorderBrush="{StaticResource DividerBrush}"
+                            BorderThickness="0,0,0,1">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="{Binding Title}"
+                                           Style="{StaticResource BodyTextStyle}"
+                                           TextTrimming="CharacterEllipsis" />
+                                <TextBlock Text="{Binding ArtistName}"
+                                           Style="{StaticResource SubtitleTextStyle}"
+                                           Margin="0,2,0,0" />
+                            </StackPanel>
+                            <Button Grid.Column="1"
+                                    Style="{StaticResource IconButtonStyle}"
+                                    Content="&#xE74D;"
+                                    Tag="{Binding Id}"
+                                    Click="OnRemoveClick"
+                                    VerticalAlignment="Center" Margin="8,0,0,0" />
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <!-- Empty state -->
+        <TextBlock Grid.Row="1" x:Name="EmptyLabel"
+                   Text="No downloads yet. Pin an album or turn on auto-cache in Settings."
+                   Style="{StaticResource SubtitleTextStyle}"
+                   TextWrapping="Wrap" TextAlignment="Center"
+                   HorizontalAlignment="Center" VerticalAlignment="Center"
+                   Margin="32" Visibility="Collapsed" />
+    </Grid>
+</Page>

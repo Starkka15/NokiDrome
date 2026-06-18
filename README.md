@@ -15,6 +15,8 @@ Built with UWP, targeting the Creators Update (build 15063 / 1703) minimum.
 - Lock screen / Bluetooth controls via System Media Transport Controls
 - Shuffle and repeat modes (Off / All / One)
 - Last.fm-compatible scrobbling via the Subsonic API
+- Offline downloads — pin an album or auto-cache as you play; store on internal or SD card
+- Album art and Next / Previous on the lock screen and Bluetooth devices
 
 ## Supported Servers
 

@@ -4,7 +4,7 @@
          xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
          xmlns:uap3="http://schemas.microsoft.com/appx/manifest/uap/windows10/3"
          IgnorableNamespaces="uap uap3 mp">
-  <Identity Name="NokiDrome" Publisher="CN=Starkka15" Version="1.0.0.0" />
+  <Identity Name="NokiDrome" Publisher="CN=Starkka15" Version="1.2.0.0" />
   <mp:PhoneIdentity PhoneProductId="E5F6A7B8-C9D0-1234-5678-9ABCDEF01234" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>NokiDrome</DisplayName>
@@ -28,11 +28,30 @@
         <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png" ShortName="NokiDrome" />
         <uap:SplashScreen Image="Assets\SplashScreen.png" BackgroundColor="#121212" />
       </uap:VisualElements>
+      <Extensions>
+        <!-- Required by the removableStorage capability: declares the audio file
+             types NokiDrome reads/writes when caching to the SD card. -->
+        <uap:Extension Category="windows.fileTypeAssociation">
+          <uap:FileTypeAssociation Name="nokidromeaudio">
+            <uap:SupportedFileTypes>
+              <uap:FileType>.mp3</uap:FileType>
+              <uap:FileType>.flac</uap:FileType>
+              <uap:FileType>.m4a</uap:FileType>
+              <uap:FileType>.aac</uap:FileType>
+              <uap:FileType>.ogg</uap:FileType>
+              <uap:FileType>.opus</uap:FileType>
+              <uap:FileType>.wav</uap:FileType>
+              <uap:FileType>.wma</uap:FileType>
+            </uap:SupportedFileTypes>
+          </uap:FileTypeAssociation>
+        </uap:Extension>
+      </Extensions>
     </Application>
   </Applications>
   <Capabilities>
     <Capability Name="internetClient" />
     <Capability Name="privateNetworkClientServer" />
     <uap3:Capability Name="backgroundMediaPlayback" />
+    <uap:Capability Name="removableStorage" />
   </Capabilities>
 </Package>

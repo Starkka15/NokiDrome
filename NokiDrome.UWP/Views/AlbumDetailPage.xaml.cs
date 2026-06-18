@@ -52,8 +52,26 @@ namespace NokiDrome.UWP.Views
             bool hasSongs = _songs.Count > 0;
             PlayAllBtn.IsEnabled = hasSongs;
             ShuffleBtn.IsEnabled = hasSongs;
+            UpdateDownloadButton();
 
             LoadingRing.IsActive = false;
+        }
+
+        private void UpdateDownloadButton()
+        {
+            bool allOffline = _songs.Count > 0 && _songs.TrueForAll(s => App.Offline.IsOffline(s.Id));
+            DownloadBtn.IsEnabled = _songs.Count > 0 && !allOffline;
+            DownloadBtn.Content   = allOffline ? "Downloaded" : "Download for offline";
+        }
+
+        private async void OnDownloadClick(object sender, RoutedEventArgs e)
+        {
+            if (_songs.Count == 0) return;
+            DownloadBtn.IsEnabled = false;
+            DownloadBtn.Content   = "Downloading…";
+            int ok = await App.Offline.DownloadManyAsync(_songs);
+            DownloadBtn.Content   = ok > 0 ? "Downloaded" : "Download failed";
+            UpdateDownloadButton();
         }
 
         private void OnBackClick(object sender, RoutedEventArgs e)

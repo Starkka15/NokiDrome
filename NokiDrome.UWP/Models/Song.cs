@@ -18,6 +18,7 @@ namespace NokiDrome.UWP.Models
         public int    BitRate     { get; set; }
         public string CoverArtId  { get; set; }
         public bool   IsStarred   { get; set; }
+        public string Suffix      { get; set; }   // original file extension, e.g. "mp3" / "flac"
 
         public string DurationText
         {
